@@ -4,14 +4,16 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/<your-username>/sample-pipeline.git'
+                git 'https://github.com/chinkurita/Jenkins-with-chatgpt-public.git'
             }
         }
 
         stage('Run Script') {
             steps {
-                sh 'chmod +x app.sh'
-                sh './app.sh'
+	    	dir('sample-pipeline'){
+                 sh 'chmod +x app.sh'
+                 sh './app.sh'
+		}
             }
         }
 
