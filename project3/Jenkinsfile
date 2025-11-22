@@ -9,8 +9,18 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/chinkurita/Jenkins-with-chatgpt-public.git'
+              script {
+            checkout([
+                $class: 'GitSCM',
+                branches: [[name: '*/main']],
+                userRemoteConfigs: [[url: 'https://github.com/chinkurita/Jenkins-with-chatgpt-public.git']],
+                extensions: [
+                    [$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [
+                        [path: 'project3']
+                    ]]
+                ]
+            ])
+        }
             }
         }
 
