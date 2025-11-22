@@ -25,20 +25,27 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            steps {
+            steps 
+	    {
+	    dir('project3'){
                 sh 'docker build -t ${IMAGE_NAME}:latest .'
+		}
             }
         }
 
         stage('Run Container for Test') {
             steps {
+	    dir('project3'){
                 sh 'docker run --rm ${IMAGE_NAME}:latest'
+		}
             }
         }
 
         stage('Tag Docker Image') {
             steps {
+	    dir('project3'){
                 sh 'docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:v1'
+		}
             }
         }
 
