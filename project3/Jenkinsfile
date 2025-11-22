@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "lab3-python-image"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/chinkurita/Jenkins-with-chatgpt-public.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${IMAGE_NAME}:latest .'
+            }
+        }
+
+        stage('Run Container for Test') {
+            steps {
+                sh 'docker run --rm ${IMAGE_NAME}:latest'
+            }
+        }
+
+        stage('Tag Docker Image') {
+            steps {
+                sh 'docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:v1'
+            }
+        }
+
+        stage('Cleanup Unused Containers') {
+            steps {
+                sh '''
+                echo "Cleaning up"
+                docker container prune -f || true
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Lab 3 Completed Successfully!"
+        }
+    }
+}
+
