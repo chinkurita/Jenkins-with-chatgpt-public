@@ -1,27 +1,29 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.9'
+            args '-u root'
+        }
+    }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git branch:'main', url:'https://github.com/chinkurita/Jenkins-with-chatgpt-public.git'
+               git branch:'main', url:'https://github.com/chinkurita/Jenkins-with-chatgpt-public.git'
             }
         }
 
-        stage('Run Script') {
+        stage('Run Python Command') {
             steps {
-	    	dir('sample-pipeline'){
-                 sh 'chmod +x app.sh'
-                 sh './app.sh'
-		}
+                sh 'python --version'
             }
         }
 
-        stage('Archive Artifact') {
+        stage('List Directory') {
             steps {
-                sh 'echo "Build completed at $(date)" > build-info.txt'
-                archiveArtifacts artifacts: 'build-info.txt', fingerprint: true
+                sh 'ls -la'
             }
         }
     }
 }
+
